@@ -1,0 +1,16 @@
+{
+  "entry_id": "01JABCDEFGHIJKLMNOPQRSTUVW",
+  "issued_at": "2026-02-01T05:00:00.000Z",
+  "subject_type": "code",
+  "subject_ref": "test123",
+  "subject_locator": "https://example.com",
+  "policy_version": "sv-0.1",
+  "result": "pass",
+  "scores": {
+    "security": 8,
+    "repro": 7
+  },
+  "report_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "key_id": "stone-verified-ed25519-2026-01",
+  "signature": "xTEhFa7mCxnS7bULPFDB0b9LhNvjM81EJ7w8Zs6JnEo3uaXCug9ijtt2VQTRjQkxVAx5ADIdB0TEQZ2esZZWBw=="
+}

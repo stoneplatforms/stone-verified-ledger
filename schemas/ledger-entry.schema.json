@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stone Verified Ledger Entry",
+  "description": "Schema for signed verification entries in the Stone Verified Ledger",
+  "type": "object",
+  "required": [
+    "entry_id",
+    "issued_at",
+    "subject_type",
+    "subject_ref",
+    "policy_version",
+    "result",
+    "report_hash",
+    "key_id",
+    "signature"
+  ],
+  "properties": {
+    "entry_id": {
+      "type": "string",
+      "description": "Unique identifier for this entry (ULID or similar)",
+      "pattern": "^[0-9A-Za-z]{26}$"
+    },
+    "issued_at": {
+      "type": "string",
+      "description": "ISO 8601 UTC timestamp",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$"
+    },
+    "subject_type": {
+      "type": "string",
+      "description": "Type of subject being verified",
+      "enum": ["code", "document", "artifact", "repository"]
+    },
+    "subject_ref": {
+      "type": "string",
+      "description": "Reference to the subject (hash, commit SHA, etc.)",
+      "minLength": 1
+    },
+    "subject_locator": {
+      "type": "string",
+      "description": "Optional URL or locator to the subject",
+      "format": "uri"
+    },
+    "policy_version": {
+      "type": "string",
+      "description": "Version of the verification policy used",
+      "pattern": "^sv-\\d+\\.\\d+$"
+    },
+    "result": {
+      "type": "string",
+      "description": "Verification result",
+      "enum": ["pass", "fail", "partial"]
+    },
+    "scores": {
+      "type": "object",
+      "description": "Optional scoring breakdown",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10
+      }
+    },
+    "report_hash": {
+      "type": "string",
+      "description": "Hash of the full verification report",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "key_id": {
+      "type": "string",
+      "description": "Identifier of the signing key used"
+    },
+    "signature": {
+      "type": "string",
+      "description": "Ed25519 signature in Base64 format",
+      "pattern": "^[A-Za-z0-9+/=]{86,88}$"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,10 @@
+{
+  "active": "stone-verified-ed25519-2026-01",
+  "keys": {
+    "stone-verified-ed25519-2026-01": {
+      "type": "ed25519",
+      "publicKeyBase64": "h3XqWKSgQwVnJ6c098d1pBw7l9POytM4O9Q6k8eVHNQ=",
+      "createdAt": "2026-02-01T00:00:00.000Z"
+    }
+  }
+}

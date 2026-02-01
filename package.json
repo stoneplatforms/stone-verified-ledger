@@ -1,0 +1,18 @@
+{
+  "name": "stone-verified-ledger",
+  "version": "1.0.0",
+  "description": "Public append-only ledger for Stone Verified entries",
+  "type": "module",
+  "scripts": {
+    "sign": "node scripts/sign-and-append.mjs",
+    "verify": "node scripts/verify.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "tweetnacl": "^1.0.3"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
