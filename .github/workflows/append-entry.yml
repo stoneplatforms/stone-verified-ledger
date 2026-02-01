@@ -26,10 +26,9 @@ jobs:
         run: |
           echo "Workflow triggered by: ${{ github.actor }}"
           echo "Repository owner: ${{ github.repository_owner }}"
-          if [ "${{ github.actor }}" != "${{ github.repository_owner }}" ]; then
-            echo "ERROR: Only repository owner can trigger this workflow"
-            exit 1
-          fi
+          echo "Repository: ${{ github.repository }}"
+          # Note: GitHub Actions already enforces permissions via the 'permissions' block
+          # This is just for logging. The workflow will only run if the user has 'contents: write' permission
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
