@@ -1,0 +1,52 @@
+name: Append Ledger Entry
+
+on:
+  workflow_dispatch:
+    inputs:
+      payload_json:
+        description: 'JSON payload for the entry (without signature)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  append-entry:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: .
+
+      - name: Sign and append entry
+        env:
+          STONE_LEDGER_PRIVATE_KEY_B64: ${{ secrets.STONE_LEDGER_PRIVATE_KEY_B64 }}
+        run: |
+          node scripts/sign-and-append.mjs '${{ inputs.payload_json }}'
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add entries/ ledger/ index/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            # Extract entry_id from JSON payload (simple approach)
+            PAYLOAD='${{ inputs.payload_json }}'
+            ENTRY_ID=$(echo "$PAYLOAD" | grep -o '"entry_id":"[^"]*"' | cut -d'"' -f4 || echo "unknown")
+            git commit -m "Add ledger entry: $ENTRY_ID"
+            git push
+          fi

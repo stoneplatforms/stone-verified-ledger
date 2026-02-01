@@ -1,0 +1,17 @@
+{
+  "entry_id": "01JRETEST123456789ABCDEFGH",
+  "issued_at": "2026-02-01T12:00:00.000Z",
+  "subject_type": "code",
+  "subject_ref": "retest789",
+  "subject_locator": "https://github.com/stoneplatforms/test-repo",
+  "policy_version": "sv-0.1",
+  "result": "pass",
+  "scores": {
+    "security": 9,
+    "repro": 8,
+    "maintainability": 7
+  },
+  "report_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "key_id": "stone-verified-ed25519-2026-01",
+  "signature": "yTXzfl27CUFGehJoFhJeUd4FUlLfsu6I20fve6TyuC1grK4AgkcinVZFvZezUtOHJaHu72mCNb0xnW/YXtDLAw=="
+}
