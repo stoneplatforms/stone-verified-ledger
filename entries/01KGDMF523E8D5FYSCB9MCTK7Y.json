@@ -1,0 +1,17 @@
+{
+  "entry_id": "01KGDMF523E8D5FYSCB9MCTK7Y",
+  "issued_at": "2026-02-01T22:16:41.795Z",
+  "subject_type": "document",
+  "subject_ref": "example-business-2024",
+  "subject_locator": "https://example.com",
+  "policy_version": "sv-0.1",
+  "result": "pass",
+  "report_hash": "sha256:f3712d9244a5afa087a2afda8f7ba40b3a70c0a8ad5328038fc7d79cbf00848e",
+  "key_id": "stone-verified-ed25519-2026-01",
+  "scores": {
+    "security": 9,
+    "compliance": 8,
+    "reproducibility": 7
+  },
+  "signature": "x17l42FksmWtfHtPRknA8RRk4BlvkkVaMtZ/S4qT+eMPOrqRIp6mMHhik4a5b+aznCpog9oZVhZFDPg6c+7yDw=="
+}
