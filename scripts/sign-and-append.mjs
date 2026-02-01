@@ -176,17 +176,25 @@ async function main() {
       process.exit(1);
     }
     
-    const privateKeyBytes = Uint8Array.from(
+    let privateKeyBytes = Uint8Array.from(
       Buffer.from(privateKeyB64, 'base64')
     );
     
-    // Validate private key length (Ed25519 private key should be 32 bytes)
-    if (privateKeyBytes.length !== 32) {
-      console.error(`Error: Private key length is ${privateKeyBytes.length} bytes, expected 32 bytes for Ed25519`);
+    // Handle different key formats:
+    // - 32 bytes: Just the private key (seed)
+    // - 64 bytes: Private key + public key concatenated (keypair)
+    // tweetnacl.sign.detached() can use either, but if we have 64 bytes,
+    // we should use just the first 32 bytes (the private key part)
+    if (privateKeyBytes.length === 64) {
+      console.log('ℹ️  Detected 64-byte keypair, extracting first 32 bytes (private key)');
+      privateKeyBytes = privateKeyBytes.slice(0, 32);
+    } else if (privateKeyBytes.length !== 32) {
+      console.error(`Error: Private key length is ${privateKeyBytes.length} bytes`);
+      console.error('Expected: 32 bytes (private key) or 64 bytes (keypair)');
       process.exit(1);
     }
     
-    console.log(`🔑 Private key length: ${privateKeyBytes.length} bytes (correct for Ed25519)`);
+    console.log(`🔑 Using private key: ${privateKeyBytes.length} bytes (correct for Ed25519)`);
     
     // Sign the canonical JSON
     const messageBytes = new TextEncoder().encode(canonicalJson);
