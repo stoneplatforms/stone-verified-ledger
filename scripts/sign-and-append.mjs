@@ -176,31 +176,39 @@ async function main() {
       process.exit(1);
     }
     
-    let privateKeyBytes = Uint8Array.from(
+    const keyBytes = Uint8Array.from(
       Buffer.from(privateKeyB64, 'base64')
     );
     
+    let secretKey; // The 64-byte secretKey for signing
+    
     // Handle different key formats:
-    // - 32 bytes: Just the private key (seed)
-    // - 64 bytes: Private key + public key concatenated (keypair)
-    // tweetnacl.sign.detached() can use either, but if we have 64 bytes,
-    // we should use just the first 32 bytes (the private key part)
-    if (privateKeyBytes.length === 64) {
-      console.log('ℹ️  Detected 64-byte keypair, extracting first 32 bytes (private key)');
-      privateKeyBytes = privateKeyBytes.slice(0, 32);
-    } else if (privateKeyBytes.length !== 32) {
-      console.error(`Error: Private key length is ${privateKeyBytes.length} bytes`);
-      console.error('Expected: 32 bytes (private key) or 64 bytes (keypair)');
+    // - 32 bytes: Private key seed - derive full keypair
+    // - 64 bytes: Full keypair (private + public) - use directly
+    if (keyBytes.length === 32) {
+      console.log('ℹ️  Detected 32-byte seed, deriving full keypair');
+      const keyPair = nacl.sign.keyPair.fromSeed(keyBytes);
+      // secretKey is 64 bytes: private key (32) + public key (32)
+      secretKey = keyPair.secretKey;
+      console.log(`🔑 Derived keypair from seed (secretKey: ${secretKey.length} bytes)`);
+    } else if (keyBytes.length === 64) {
+      console.log('ℹ️  Detected 64-byte keypair, using directly');
+      // tweetnacl.sign.detached() expects secretKey to be 64 bytes
+      // Format: [private key (32 bytes)][public key (32 bytes)]
+      secretKey = keyBytes;
+      console.log(`🔑 Using provided keypair (secretKey: ${secretKey.length} bytes)`);
+    } else {
+      console.error(`Error: Key length is ${keyBytes.length} bytes`);
+      console.error('Expected: 32 bytes (seed) or 64 bytes (keypair)');
       process.exit(1);
     }
-    
-    console.log(`🔑 Using private key: ${privateKeyBytes.length} bytes (correct for Ed25519)`);
     
     // Sign the canonical JSON
     const messageBytes = new TextEncoder().encode(canonicalJson);
     console.log(`📝 Message bytes length: ${messageBytes.length}`);
     
-    const signatureBytes = nacl.sign.detached(messageBytes, privateKeyBytes);
+    // tweetnacl.sign.detached() expects secretKey to be 64 bytes (full keypair)
+    const signatureBytes = nacl.sign.detached(messageBytes, secretKey);
     const signatureB64 = Buffer.from(signatureBytes).toString('base64');
     
     console.log(`✍️  Signature generated: ${signatureB64.substring(0, 20)}... (${signatureB64.length} chars)`);
