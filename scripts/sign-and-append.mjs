@@ -75,10 +75,17 @@ function loadKeys() {
 
 /**
  * Validate entry against schema using Ajv
+ * Note: We validate the payload WITHOUT signature since signature is added by this script
  */
 function validateEntry(entry, schema) {
+  // Create a copy of the schema without 'signature' in required fields
+  const validationSchema = JSON.parse(JSON.stringify(schema)); // Deep copy
+  if (validationSchema.required && Array.isArray(validationSchema.required)) {
+    validationSchema.required = validationSchema.required.filter(field => field !== 'signature');
+  }
+  
   const ajv = new Ajv({ allErrors: true, strict: false });
-  const validate = ajv.compile(schema);
+  const validate = ajv.compile(validationSchema);
   const valid = validate(entry);
   
   if (!valid) {
