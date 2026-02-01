@@ -8,17 +8,31 @@ on:
         required: true
         type: string
 
+# Restrict workflow to only run from main branch and require admin approval
 permissions:
   contents: write
 
 jobs:
   append-entry:
     runs-on: ubuntu-latest
+    # Only allow workflow to run if triggered by repository owner/admin
+    if: github.event_name == 'workflow_dispatch' && (github.actor == 'stoneplatforms' || github.event.workflow_dispatch.actor == github.repository_owner)
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Only checkout main branch
+          ref: main
+
+      - name: Verify actor permissions
+        run: |
+          echo "Workflow triggered by: ${{ github.actor }}"
+          echo "Repository owner: ${{ github.repository_owner }}"
+          if [ "${{ github.actor }}" != "${{ github.repository_owner }}" ]; then
+            echo "ERROR: Only repository owner can trigger this workflow"
+            exit 1
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
