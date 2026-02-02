@@ -24,6 +24,36 @@ const FIELD_ORDER = [
   'subject_type',
   'subject_ref',
   'subject_locator',
+  'business_legal_name',
+  'business_dba',
+  'business_ein',
+  'business_address',
+  'business_country',
+  'business_state',
+  'business_industry',
+  'business_website',
+  'business_contact_email',
+  'app_name',
+  'app_version',
+  'app_platform',
+  'app_language',
+  'app_framework',
+  'repository_url',
+  'license_type',
+  'artifact_hash',
+  'verification_date',
+  'verification_method',
+  'verified_by',
+  'compliance_standards',
+  'verification_scope',
+  'risk_level',
+  'expires_at',
+  'related_entry_ids',
+  'tags',
+  'certificate_ids',
+  'dependencies',
+  'ai_models_used',
+  'notes',
   'policy_version',
   'result',
   'scores',
@@ -47,6 +77,14 @@ function canonicalize(entry) {
           sortedScores[key] = entry.scores[key];
         });
         canonical[field] = sortedScores;
+      } else if (Array.isArray(entry[field])) {
+        // Sort all array fields alphabetically for consistent canonicalization
+        const arrayFields = ['ai_models_used', 'compliance_standards', 'related_entry_ids', 'tags', 'certificate_ids', 'dependencies'];
+        if (arrayFields.includes(field)) {
+          canonical[field] = [...entry[field]].sort();
+        } else {
+          canonical[field] = entry[field];
+        }
       } else {
         canonical[field] = entry[field];
       }
