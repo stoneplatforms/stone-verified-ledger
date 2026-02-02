@@ -12,6 +12,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import nacl from 'tweetnacl';
 import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -122,7 +123,11 @@ function validateEntry(entry, schema) {
     validationSchema.required = validationSchema.required.filter(field => field !== 'signature');
   }
   
-  const ajv = new Ajv({ allErrors: true, strict: false });
+  const ajv = new Ajv({ 
+    allErrors: true, 
+    strict: false
+  });
+  addFormats(ajv); // Enable format validation (date-time, uri, email, etc.)
   const validate = ajv.compile(validationSchema);
   const valid = validate(entry);
   
