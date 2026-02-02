@@ -1,0 +1,16 @@
+{
+  "entry_id": "01KGDMV3CY7BGFVPNFKSQNHGD1",
+  "issued_at": "2026-02-01T22:23:13.310Z",
+  "subject_type": "document",
+  "subject_ref": "test-entry-1769984593",
+  "subject_locator": "https://example.com",
+  "policy_version": "sv-0.1",
+  "result": "pass",
+  "report_hash": "sha256:bfc5eb10a9007d038510b8beae00594ef63260392d1491fa1793ac59db734947",
+  "key_id": "stone-verified-ed25519-2026-01",
+  "scores": {
+    "security": 9,
+    "compliance": 8
+  },
+  "signature": "8qImX7Et/nXRgTnSYyd1T67VxV73El2zYGNarSuF7PD+DtU13JSLWe7QkBv7KfsCqP97ocFGv1P8963IN2voBg=="
+}
